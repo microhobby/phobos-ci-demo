@@ -42,5 +42,6 @@ jobs:
         run: |
           ./gaia/mimir-cli \
             I want to build deimos kernel linux for cm5 \
+            remember to use relative path for distro argument \
             just the kernel linux nothing more, use the recipe argument \
             and the --dev argument, the source is already cloned

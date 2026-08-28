@@ -1,0 +1,40 @@
+
+name: Mimir GitHub Actions Example
+run-name: Mimir GitHub Actions Example - ${{ github.workflow }}
+on:
+  - push
+
+jobs:
+  sanity-check:
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: pergamos/podman:trixie
+      options: --privileged --cgroupns=host
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Initialize Gaia
+        run: |
+          apt-get update && apt-get install -y git sudo
+          git clone https://github.com/gaiaBuildSystem/gaia.git
+          cd ./gaia
+          ./init
+          # make sure deno is under /usr/bin
+          ln -s /root/.deno/bin/deno /usr/bin/deno
+
+      - name: Initialize Kernel
+        run: |
+          cd ./gaia
+          mkdir -p build-DeimOS-Reference/tmp/cm5/
+          git clone --depth 1 -b cm5-demo https://github.com/gaiaBuildSystem/linux build-DeimOS-Reference/tmp/cm5/linux
+
+      - name: Run Mimir Tests
+        env:
+          MIMIR_AUTO_RETRY: 1
+        run: |
+          ./gaia/mimir-cli \
+            I want to build deimos kernel linux for cm5 \
+            just the kernel linux nothing more, use the recipe argument \
+            and the --dev argument, the source is already cloned

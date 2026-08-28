@@ -24,6 +24,9 @@ jobs:
           # make sure deno is under /usr/bin
           ln -s /root/.deno/bin/deno /usr/bin/deno
 
+          cd ..
+          git clone https://github.com/gaiaBuildSystem/cookbook-rpi.git
+
       - name: Initialize Kernel
         run: |
           cd ./gaia
